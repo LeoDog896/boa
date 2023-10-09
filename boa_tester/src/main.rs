@@ -94,7 +94,7 @@ use serde::{
 use std::{
     ops::{Add, AddAssign},
     path::{Path, PathBuf},
-    process::Command,
+    process::Command, time::Instant,
 };
 
 /// Structure that contains the configuration of the tester.
@@ -476,7 +476,10 @@ fn run_test_suite(
         if verbose != 0 {
             println!("Test suite loaded, starting tests...");
         }
+
+        let start = Instant::now();
         let results = suite.run(&harness, verbose, parallel, edition, optimizer_options);
+        let duration = start.elapsed();
 
         if versioned {
             let mut table = comfy_table::Table::new();
@@ -513,7 +516,7 @@ fn run_test_suite(
                     conformance,
                 ]);
             }
-            println!("\n\nResults\n");
+            println!("\n\nResults (took {}s)\n", duration.as_secs());
             println!("{table}");
         } else {
             let Statistics {
@@ -522,7 +525,7 @@ fn run_test_suite(
                 ignored,
                 panic,
             } = results.stats;
-            println!("\n\nResults ({edition}):");
+            println!("\n\nResults ({edition}, took {}s):", duration.as_secs());
             println!("Total tests: {total}");
             println!("Passed tests: {}", passed.to_string().green());
             println!("Ignored tests: {}", ignored.to_string().yellow());
