@@ -222,6 +222,7 @@ impl Number {
         // 1. Let x be ? thisNumberValue(this value).
         let this_num = Self::this_number_value(this)?;
         let precision = match args.first() {
+            // 3. Assert: If fractionDigits is undefined, then f is 0.
             None | Some(JsValue::Undefined) => None,
             // 2. Let f be ? ToIntegerOrInfinity(fractionDigits).
             Some(n) => Some(n.to_integer_or_infinity(context)?),

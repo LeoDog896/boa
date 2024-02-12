@@ -34,6 +34,8 @@ fn to_exponential() {
             js_string!("NaN"),
         ),
         TestAction::assert_eq("Number('1.23e+2').toExponential()", js_string!("1.23e+2")),
+        TestAction::assert_eq("Number(25).toExponential(0)", js_string!("3e+1")),
+        TestAction::assert_eq("Number(12345).toExponential(3)", js_string!("1.235e+4")),
     ]);
 }
 
